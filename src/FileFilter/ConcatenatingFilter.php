@@ -9,7 +9,7 @@ class ConcatenatingFilter extends FileFilter
     private $prependString;
 
     /**
-     * @param \Intahwebz\File $outputFile
+     * @param \FileFilter\File $outputFile
      * @param array $jsIncludeArray
      * @param null $prependString - What string to append to files. %FILENAME% will be replaced by the source filename
      * @param int $filterUpdateMode
@@ -46,7 +46,7 @@ class ConcatenatingFilter extends FileFilter
 
     /**
      * @param $tempFilename
-     * @return \Intahwebz\File|void
+     * @return \FileFilter\File|void
      * @throws \Exception
      */
     public function filter($tempFilename)

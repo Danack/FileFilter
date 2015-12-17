@@ -3,8 +3,6 @@
 
 namespace FileFilter;
 
-use Tier\Path;
-
 class YuiCompressorPath
 {
     private $path;
