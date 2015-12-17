@@ -1,41 +1,46 @@
 <?php
 
 
-namespace Intahwebz\FileFilter;
+namespace FileFilter;
 
-// TODO - this probably shouldn't be in a standard library.
-use Intahwebz\Storage\Storage;
-//use Intahwebz\File;
+use FileFilter\Storage;
 use FileFilter\File;
 
 class StorageDownloadFilter extends FileFilter
 {
     /**
-     * @var \Intahwebz\Storage\Storage
+     * @var \FileFilter\Storage
      */
     private $storage;
     
     private $storageFilename;
-    
-    private $bucket;
 
-    public function __construct(
+    public function     __construct(
         Storage $storage,
         File $destFile,
-        $bucket,
         $storageFilename,
         $filterUpdateMode = FileFilter::CHECK_EXISTS_AND_PREVIOUS
     ) {
         $this->storage = $storage;
         $this->filterUpdateMode = $filterUpdateMode;
         $this->destFile = $destFile;
-        $this->bucket = $bucket;
         $this->storageFilename = $storageFilename;
     }
 
     public function filter($tmpName)
     {
-        $this->storage->downloadFileFromS3Bucket($this->bucket, $this->storageFilename, $tmpName);
+        $this->storage->downloadFile($this->storageFilename, $tmpName);
+    }
+    
+    public function process()
+    {
+        if ($this->requiresUpdate() == true) {
+            if ($this->previousFilter != null) {
+                $this->previousFilter->process();
+            }
+
+            $this->filter($this->destFile->getPath());
+        }
     }
 
     public function srcModified()
