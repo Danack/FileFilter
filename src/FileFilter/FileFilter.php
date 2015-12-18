@@ -7,16 +7,19 @@ use FileFilter\File;
 function correctUmask($filename)
 {
     $umask = umask();
-    $correctMode = ( 0777 - $umask);
+    $correctMode = (0777 - $umask);
 
     return chmod($filename, $correctMode);
 }
 
 function saveTmpFile($tmpName, $destFilename)
 {
-    renameMultiplatform($tmpName, $destFilename);
+    $renamed = @rename($tmpName, $destFilename);
+    if (!$renamed) {
+        throw new FileFilterException("Faild to rename '$tmpName' to '$destFilename' ");
+    }
+    
     correctUmask($destFilename);
-    //@unlink($tmpName);
 }
 
 abstract class FileFilter
