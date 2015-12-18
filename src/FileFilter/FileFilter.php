@@ -14,9 +14,12 @@ function correctUmask($filename)
 
 function saveTmpFile($tmpName, $destFilename)
 {
+    $umask = umask();
+    @mkdir(dirname($destFilename), $umask, true);
+
     $renamed = @rename($tmpName, $destFilename);
     if (!$renamed) {
-        throw new FileFilterException("Faild to rename '$tmpName' to '$destFilename' ");
+        throw new FileFilterException("Failed to rename '$tmpName' to '$destFilename' ");
     }
     
     correctUmask($destFilename);
