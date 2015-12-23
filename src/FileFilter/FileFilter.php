@@ -4,19 +4,16 @@ namespace FileFilter;
 
 use FileFilter\File;
 
-function correctUmask($filename)
-{
-    $umask = umask();
-    $correctMode = ( 0777 - $umask);
-
-    return chmod($filename, $correctMode);
-}
-
 function saveTmpFile($tmpName, $destFilename)
 {
-    renameMultiplatform($tmpName, $destFilename);
-    correctUmask($destFilename);
-    //@unlink($tmpName);
+    @mkdir(dirname($destFilename), 0755, true);
+    rename($tmpName, $destFilename);
+
+    //@TODO - better permissions 
+    // $umask = umask();
+    // $correctMode = ( 0777 - $umask);
+
+    return chmod($destFilename, 0755);
 }
 
 abstract class FileFilter
